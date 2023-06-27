@@ -13,8 +13,13 @@ from time import sleep
 import sqlite3
 
 # ------------------------Setting the stage of the program-------------------------#
+# pages on Ted.com to scrape
+start_page = 0
+end_page = 5
+interval = 1
 
-pages = [str(i) for i in range(0, 168, 1)] # page iterations. change this to change the number of pages you want to scrape.
+
+pages = [str(i) for i in range(start_page, end_page, interval)] # page iterations. change this to change the number of pages you want to scrape.
 
 page_urls = []
 for page in pages:
@@ -25,14 +30,16 @@ for page in pages:
 talks = [] # also called add_links
 
 # find href links to talks in page content under <a> tags
-pbar = tqdm(total=len(page_urls), dynamic_ncols=True, colour= 'green')
+pbar = tqdm(total=len(page_urls), dynamic_ncols=True, colour= 'red')
 for i, page in enumerate(page_urls):
-    page = requests.get(page[i])
+
+    time.sleep(0.5)
+    pbar.update(1)
+    pbar.set_description(f'Downloading page {i+1}/{len(page_urls)}', refresh=True)
+
+    page = requests.get(page_urls[i])
     soup = BeautifulSoup(page.content, 'html.parser')
     for link in soup.find_all('a'):
-        time.sleep(0.5)
-        pbar.update(1)
-        pbar.set_description(f'Downloading page {i+1}/{len(page_urls)}', refresh=True)
 
         if link.has_attr('href') and link['href'].startswith('/talks/'):
             ted_url = 'https://www.ted.com'
@@ -43,7 +50,7 @@ for i, page in enumerate(page_urls):
             else:
         # if link already exists in talks list, skip it
                 continue
-            time.sleep(0.5)
+            time.sleep(0.2)
 pbar.close()
 
 # -----------------------------Collect TedTalk Titles----------------------------------#
@@ -63,8 +70,12 @@ for i, ad in enumerate(talks):
     #--------Title Schema------------#
     title_schema = soup.find('head').find('title').text.strip()
 
-    #--------Description Schema------------#
-    description_schema = soup.find('head').find('meta', attrs={'name':'description'})['content'].strip()
+       #--------Description Schema------------#
+    try:
+        description_schema = soup.find('head').find('meta', attrs={'name':'description'})['content'].strip()
+
+    except:
+        description_schema = ''
 
     #--------Likes Schema------------#
     likes_schema = soup.find_all('span')[0].get_text().strip()
