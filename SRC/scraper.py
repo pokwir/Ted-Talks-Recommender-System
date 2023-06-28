@@ -30,7 +30,7 @@ for page in pages:
 talks = [] # also called add_links
 
 # find href links to talks in page content under <a> tags
-pbar = tqdm(total=len(page_urls), dynamic_ncols=True, colour= 'red')
+pbar = tqdm(total=len(page_urls), dynamic_ncols=True, colour= '#00fff7')
 for i, page in enumerate(page_urls):
 
     time.sleep(0.5)
@@ -55,13 +55,13 @@ pbar.close()
 
 # -----------------------------Collect TedTalk Titles----------------------------------#
 
-pbar = tqdm(total=len(talks), dynamic_ncols=True, colour= 'green')
+pbar = tqdm(total=len(talks), dynamic_ncols=True, colour= '#ffbf00')
 
 for i, ad in enumerate(talks):
     #-------create dataframe--------#
     df = pd.DataFrame(columns=["author", "talk", "description", "likes", "views"])
 
-    time.sleep(2)
+    time.sleep(1)
     pbar.update(1)
     response = requests.get(talks[i])
     soup = BeautifulSoup(response.text, 'lxml')
@@ -94,7 +94,7 @@ for i, ad in enumerate(talks):
     except:
         views = 0
 
-    pbar.set_description(f'Downloading {talk}', refresh=True)
+    pbar.set_description(f'Downloading talk from {author}', refresh=True)
 
     # add to dataframe
     df = df.append({'author': author, 'talk': talk, 'description': description, 'likes': likes, 'views': views}, ignore_index=True)
@@ -103,14 +103,20 @@ for i, ad in enumerate(talks):
  
     conn = sqlite3.connect('talks.db')
     cur = conn.cursor()
-                
-    for i in range(len(df)):
-        cur.execute("INSERT INTO talks (author, talk, description, likes, views) VALUES (?, ?, ?, ?, ?)", (df.iloc[i]['author'], df.iloc[i]['talk'], df.iloc[i]['description'], df.iloc[i]['likes'], df.iloc[i]['views']))
+    df.to_sql('talks', conn, if_exists='append', index=False)
     conn.commit()
 
+    pbar.set_description(f'Adding Talk from {author} to database', refresh=True)
     time.sleep(1)
-    pbar.set_description(f'Adding {talk} to database', refresh=True)
-    pbar.update(1)
+    
+                
+    # # for i in range(len(df)):
+    # cur.execute("INSERT INTO talks (author, talk, description, likes, views) VALUES (?, ?, ?, ?, ?)", (df.iloc[i]['author'], df.iloc[i]['talk'], df.iloc[i]['description'], df.iloc[i]['likes'], df.iloc[i]['views']))
+    # conn.commit()
+
+    # time.sleep(1)
+    # pbar.set_description(f'Adding Talk from {author} to database', refresh=True)
+    # pbar.update(2)
 
     time.sleep(1)
     cur.execute("SELECT * FROM talks")
@@ -118,5 +124,6 @@ for i, ad in enumerate(talks):
 
     pbar.set_description(f"There are {len(rows)} records in the database", refresh=True)
     conn.close()
-    time.sleep(1)
+    time.sleep(0.1)
 pbar.close()
+# close the scraping session
