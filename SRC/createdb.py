@@ -23,7 +23,8 @@ cur.execute("CREATE TABLE IF NOT EXISTS talks (id INTEGER PRIMARY KEY AUTOINCREM
                 , talk TEXT\
                 , description TEXT\
                 , likes TEXT\
-                , views TEXT)")
+                , views TEXT\
+                , url TEXT)")
 conn.commit()
 conn.close()
 

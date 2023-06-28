@@ -15,7 +15,7 @@ import sqlite3
 # ------------------------Setting the stage of the program-------------------------#
 # pages on Ted.com to scrape
 start_page = 0
-end_page = 5
+end_page = 168
 interval = 1
 
 
@@ -59,7 +59,7 @@ pbar = tqdm(total=len(talks), dynamic_ncols=True, colour= '#ffbf00')
 
 for i, ad in enumerate(talks):
     #-------create dataframe--------#
-    df = pd.DataFrame(columns=["author", "talk", "description", "likes", "views"])
+    df = pd.DataFrame(columns=["author", "talk", "description", "likes", "views", "url"])
 
     time.sleep(1)
     pbar.update(1)
@@ -68,7 +68,10 @@ for i, ad in enumerate(talks):
 
 
     #--------Title Schema------------#
-    title_schema = soup.find('head').find('title').text.strip()
+    try:
+        title_schema = soup.find('head').find('title').text.strip()
+    except:
+        title_schema = ''
 
        #--------Description Schema------------#
     try:
@@ -78,10 +81,16 @@ for i, ad in enumerate(talks):
         description_schema = ''
 
     #--------Likes Schema------------#
-    likes_schema = soup.find_all('span')[0].get_text().strip()
+    try:
+        likes_schema = soup.find_all('span')[0].get_text().strip()
+    except:
+        likes_schema = ''
 
     #--------Views Schema------------#
-    views_schema = soup.find_all('div', class_='text-sm w-full truncate text-gray-900')
+    try:
+        views_schema = soup.find_all('div', class_='text-sm w-full truncate text-gray-900')
+    except:
+        views_schema = ''
 
 
     # get author name from title 
@@ -97,7 +106,7 @@ for i, ad in enumerate(talks):
     pbar.set_description(f'Downloading talk from {author}', refresh=True)
 
     # add to dataframe
-    df = df.append({'author': author, 'talk': talk, 'description': description, 'likes': likes, 'views': views}, ignore_index=True)
+    df = df.append({'author': author, 'talk': talk, 'description': description, 'likes': likes, 'views': views, 'url': talks[i]}, ignore_index=True)
 
  # ----------------------------------------Saving to Database--------------------------------------------#
  
