@@ -12,10 +12,12 @@ from time import sleep
 
 import sqlite3
 
+from progress.bar import FillingCirclesBar as Bar
+
 # ------------------------Setting the stage of the program-------------------------#
 # pages on Ted.com to scrape
 start_page = 0
-end_page = 168
+end_page = 15
 interval = 1
 
 
@@ -30,12 +32,14 @@ for page in pages:
 talks = [] # also called add_links
 
 # find href links to talks in page content under <a> tags
-pbar = tqdm(total=len(page_urls), dynamic_ncols=True, colour= '#00fff7')
+bar = Bar('Collecting TedTalk Links', max=len(page_urls))
+pbar = tqdm(total=len(page_urls), dynamic_ncols=True, colour= '#00fff7', smoothing=0.005)
 for i, page in enumerate(page_urls):
 
     time.sleep(0.5)
     pbar.update(1)
     pbar.set_description(f'Downloading page {i+1}/{len(page_urls)}', refresh=True)
+  
 
     page = requests.get(page_urls[i])
     soup = BeautifulSoup(page.content, 'html.parser')
@@ -51,11 +55,12 @@ for i, page in enumerate(page_urls):
         # if link already exists in talks list, skip it
                 continue
             time.sleep(0.2)
+
 pbar.close()
 
 # -----------------------------Collect TedTalk Titles----------------------------------#
 
-pbar = tqdm(total=len(talks), dynamic_ncols=True, colour= '#ffbf00')
+pbar = tqdm(total=len(talks), dynamic_ncols=True, colour= '#ffbf00', smoothing=0.05)
 
 for i, ad in enumerate(talks):
     #-------create dataframe--------#
