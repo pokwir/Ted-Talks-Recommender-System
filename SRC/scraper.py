@@ -17,7 +17,7 @@ from progress.bar import FillingCirclesBar as Bar
 # ------------------------Setting the stage of the program-------------------------#
 # pages on Ted.com to scrape
 start_page = 0
-end_page = 15
+end_page = 168
 interval = 1
 
 
@@ -97,12 +97,32 @@ for i, ad in enumerate(talks):
     except:
         views_schema = ''
 
-
+    #--------collect varriables------------#
     # get author name from title 
-    author = title_schema.split(':')[0]
-    talk = title_schema.split(':')[1].strip().replace('| TED Talk', '')
-    description = description_schema
-    likes = likes_schema.replace('(', '').replace(')', '')
+    try: 
+        author = title_schema.split(':')[0]
+    except:
+        author = ''
+
+    # talk title
+    try: 
+        talk = title_schema.split(':')[1].strip().replace('| TED Talk', '')
+    except:
+        talk = ''
+        
+    # description 
+    try: 
+        description = description_schema
+    except:
+        description = ''
+
+    # number of likes
+    try: 
+        likes = likes_schema.replace('(', '').replace(')', '')
+    except:
+        likes = ''
+
+    # number of views
     try: 
         views = views_schema[0].get_text().strip().split()[0]
     except:
