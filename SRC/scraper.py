@@ -12,7 +12,7 @@ from time import sleep
 
 import sqlite3
 
-from progress.bar import FillingCirclesBar as Bar
+
 
 # ------------------------Setting the stage of the program-------------------------#
 # pages on Ted.com to scrape
@@ -32,7 +32,7 @@ for page in pages:
 talks = [] # also called add_links
 
 # find href links to talks in page content under <a> tags
-bar = Bar('Collecting TedTalk Links', max=len(page_urls))
+
 pbar = tqdm(total=len(page_urls), dynamic_ncols=True, colour= '#00fff7', smoothing=0.005)
 for i, page in enumerate(page_urls):
 
