@@ -22,6 +22,7 @@ cur.execute("CREATE TABLE IF NOT EXISTS talks (id INTEGER PRIMARY KEY AUTOINCREM
                 , author TEXT\
                 , talk TEXT\
                 , description TEXT\
+                , transcript TEXT\
                 , likes TEXT\
                 , views TEXT\
                 , url TEXT)")

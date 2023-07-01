@@ -12,6 +12,7 @@ from tqdm import tqdm
 from time import sleep
 
 import sqlite3
+import json
 
 # ------------------------Setting the stage of the program-------------------------#
 # pages on Ted.com to scrape
@@ -63,7 +64,7 @@ pbar = tqdm(total=len(talks), dynamic_ncols=True, colour='#ffbf00', smoothing=0.
 
 for i, ad in enumerate(talks):
     # -------create dataframe--------#
-    df = pd.DataFrame(columns=["author", "talk", "description", "likes", "views", "url"])
+    df = pd.DataFrame(columns=["author", "talk", "description", "transcript", "likes", "views", "url"])
 
     time.sleep(1)
     pbar.update(1)
@@ -94,6 +95,13 @@ for i, ad in enumerate(talks):
         views_schema = soup.find_all('div', class_='text-sm w-full truncate text-gray-900')
     except:
         views_schema = ''
+    
+    # --------Transcript Schema------------#
+    try:
+        transcript_schema = soup.find('head').find('script', type='application/ld+json').text
+        transcript_schema = json.loads(transcript_schema)
+    except:
+        transcript_schema = ''
 
     # --------collect varriables------------#
     # get author name from title 
@@ -125,12 +133,17 @@ for i, ad in enumerate(talks):
         views = views_schema[0].get_text().strip().split()[0]
     except:
         views = 0
+    
+    try:
+        transcript = transcript_schema.get('transcript')
+    except:
+        transcript = ''
 
     pbar.set_description(f'Downloading talk from {author}', refresh=True)
 
     # add to dataframe
     df = df.append(
-        {'author': author, 'talk': talk, 'description': description, 'likes': likes, 'views': views, 'url': talks[i]},
+        {'author': author, 'talk': talk, 'description': description, "transcript": transcript, 'likes': likes, 'views': views, 'url': talks[i]},
         ignore_index=True)
 
     # ----------------------------------------Saving to Database--------------------------------------------#

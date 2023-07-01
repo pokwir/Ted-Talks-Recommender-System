@@ -48,9 +48,9 @@ indices = pd.Series(df.index, index=df['item']).drop_duplicates()
 # now we create a function recomender that will recommend simmilar products, function must take item_id and count as parameters
 cosine_sim=cosine_sim
 
-talk_to_search = input('whats the title of the talk?')
+talk_to_search = input('Whats the title of the talk?  ')
 talk_to_search = talk_to_search.lower()
-top_n_results = input('how many results would you like to return?')
+top_n_results = input('How many results would you like to return?  ')
 top_n_results = int(top_n_results)
 
 results = []
@@ -79,12 +79,15 @@ def recomender(talk_to_search, top_n_results):
     # get author, talk using top_talks_idx
     top_talks_author = df['author'].iloc[item_indicies].values[:count]
     top_talks_talk = df['talk'].iloc[item_indicies].values[:count]
+    top_talks_views = df['views'].iloc[item_indicies].values[:count]
+    top_talks_likes = df['likes'].iloc[item_indicies].values[:count]
 
     # create a result df 
-    result_df = pd.DataFrame({'author': top_talks_author, 'talk': top_talks_talk})
+    result_df = pd.DataFrame({'author': top_talks_author, 'talk': top_talks_talk, 'views': top_talks_views, 'likes': top_talks_likes})
+    # result_df.sort_values('views', ascending=False, inplace=True)
 
     # rename columns
-    result_df.columns = ['author', 'talk']
+    result_df.columns = ['author', 'talk' , 'views', 'likes']
 
     print(result_df)
 
