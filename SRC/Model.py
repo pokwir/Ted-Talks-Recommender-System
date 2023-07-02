@@ -31,7 +31,7 @@ pbar = tqdm(total=len(df), colour='#ffbf00', smoothing=0.05, dynamic_ncols=True)
 for index, row in df.iterrows():
     df.at[index, 'description'] = row['description'].lower()
     pbar.update(1)
-    pbar.set_description('Cleaning the data')
+    pbar.set_description('Cleaning the data')s
     time.sleep(0.001)
 pbar.close()
 
