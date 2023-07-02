@@ -12,6 +12,12 @@ from sklearn.metrics.pairwise import cosine_similarity
 from nltk.corpus import stopwords
 import string
 
+import os
+import sys
+
+from tqdm import tqdm
+import time
+
 # ---------------------------------------Functions-------------------------------------------# 
 
 
@@ -20,13 +26,34 @@ data = '/Users/patrickokwir/Desktop/Git_Projects/Ted-Talks-Recommender-System/Da
 df = pd.read_csv(data, index_col=0)
 
 # ---------------------------------------Clean The Data-------------------------------------------#
+# progress bar
+pbar = tqdm(total=len(df), colour='#ffbf00', smoothing=0.05, dynamic_ncols=True)
+for index, row in df.iterrows():
+    df.at[index, 'description'] = row['description'].lower()
+    pbar.update(1)
+    pbar.set_description('Cleaning the data')
+    time.sleep(0.001)
+pbar.close()
+
+
 stop_words = set(stopwords.words('english'))
 df['description'] = df['description'].str.strip()
 df['description'] = df['description'].apply(lambda x: ' '.join([word for word in x.split() if word not in (stop_words)]))
 df['description'] = df['description'].apply(lambda x: ' '.join([word for word in x.split() if word not in string.punctuation]))
 df['description'] = df['description'].apply(lambda x: ' '.join([word for word in x.split() if word not in string.digits]))
 
+
+
 # ---------------------------------------Vectorize The Data----------------------------------------#
+# progress bar 
+pbar = tqdm(total=len(df), colour='#ffbf00', smoothing=0.05, dynamic_ncols=True)
+for index, row in df.iterrows():
+    df.at[index, 'description'] = row['description'].lower()
+    pbar.update(1)
+    pbar.set_description('Vectorizing the data')
+    time.sleep(0.001)
+pbar.close()
+
 tfidf = TfidfVectorizer(stop_words='english')
 # fit and transform 'description' column to get the tfidf matrix
 tfidf_matrix = tfidf.fit_transform(df['description'])
@@ -52,6 +79,14 @@ talk_to_search = input('Whats the title of the talk?  ')
 talk_to_search = talk_to_search.lower()
 top_n_results = input('How many results would you like to return?  ')
 top_n_results = int(top_n_results)
+
+# progres bar preparing the results
+pbar = tqdm(total=top_n_results, colour='#ffbf00', smoothing=0.05, dynamic_ncols=True)
+for i in range(top_n_results):
+    pbar.update(1)
+    pbar.set_description('Recommending talks')
+    time.sleep(1)
+pbar.close()
 
 results = []
 def recomender(talk_to_search, top_n_results):
