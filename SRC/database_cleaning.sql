@@ -11,10 +11,12 @@
 
 -- DELETE from talks where views LIKE '%M%' OR views LIKE '%W%' OR views LIKE '%O%' OR views LIKE '%H%' OR views LIKE '%F%'
 
-select author, talk, description, likes, views 
-from talks
+-- select author, talk, description, likes, views 
+-- from talks
 
-GROUP BY author
-ORDER BY views DESC LIMIT 150
+-- GROUP BY author
+-- ORDER BY views DESC LIMIT 150
+
+-- Delete from topics
 
 
