@@ -18,11 +18,7 @@
 - Check for missing values and handle them appropriately.
 - Examine the distribution of variables such as transcripts, titles, authors, topics, views, and dates.
 - Gain insights into the content of TED Talks by analyzing the transcripts and topics.
-**2.3 Perform text preprocessing:**
-- Clean the text data by removing special characters, punctuation, and stopwords.
-- Convert text to lowercase and handle any inconsistencies.
-- Apply tokenization, stemming, or lemmatization to standardize the text data.
-**2.4 Analyze text statistics and patterns:**
+**2.3 Analyze text statistics and patterns:**
 - Calculate word frequency and distribution in the transcripts.
 - Identify the most common words or phrases used in TED Talks.
 - Explore the relationship between topics, authors, and viewer engagement.
