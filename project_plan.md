@@ -1,5 +1,13 @@
 # Project Plan
 
+Group Conditions
+- Build all initial code into jupyter notebooks
+- Naming Conventions
+    - name the imported csv: tedtalk_data
+    - for cleaning: tedtalk_lowercase, tedtalk_stopwords, tedtalk_tokenization, tedtalk_stemming, tedtalk_lemmatisation
+    - for EDA: tedtalk_sentimentanalysis, tedtalk_topicanalysis, tedltalk_word_frequency, tedltalk_sentence_length, tedltalk_average_word_length
+- Use nltk library for stopword corpus
+
 ### Step 1: Data Scraping
 
 **1.1 Create a list of page URLs:** 
@@ -8,92 +16,88 @@
 - Iterate over each page URL and extract the talk links using BeautifulSoup.
 **1.3 Save talk links to a database:** 
 - Create a database connection and store the scraped talk links in the database.
+###### talk_1.csv is without transcript, talk_2 is with transcript for each ted talk
 
 
 ## Step 2: Exploratory Data Analysis
 **2.1 Load the TED Talks dataset:**
 - Read the dataset of TED Talks data into a dataframe.
-**2.2 Explore the dataset:**
-- Analyze the structure of the dataset.
-- Check for missing values and handle them appropriately.
+**2.2 Explore the dataset:** UCHE
+- Analyze the structure of the dataset (basic statistical analysis).
+- Check for missing values and handle them appropriately. (REMOVE INCOMPLETE ROWS)
 - Examine the distribution of variables such as transcripts, titles, authors, topics, views, and dates.
 - Gain insights into the content of TED Talks by analyzing the transcripts and topics.
 **2.3 Analyze text statistics and patterns:**
-- Calculate word frequency and distribution in the transcripts.
-- Identify the most common words or phrases used in TED Talks.
-- Explore the relationship between topics, authors, and viewer engagement.
+- Calculate word frequency, word distribution, sentence length in the transcripts. - PATRICK
+- Identify the most common words or phrases and conduct latent topic analysis used in TED Talks. (Use counter function - word level analysis, consider bigram/trigram) - PATRICK
+    ###### SEE: https://neptune.ai/blog/exploratory-data-analysis-natural-language-processing-tools
+- Explore the relationship between topics, authors, and viewer engagement (i.e. do certain topics have more views on average, most liked videos, distribution of likes, views, number of talks per author/topic) - BRITT
+- Time series analysis how have views on tedtalks grown/diminished over time - UCHE
+- Named Entity Recognition (NER) - to identify and extract named entities such as person names, locations, organizations, or other specific entities of interest. Analyze the frequency and distribution of these entities to gain insights about the content of your text. UCHE
 
-## Step 3: Data Cleaning
-
-**3.1 Handle missing values:**
-- Identify missing values in the TED Talks dataset.
-- Decide on an appropriate strategy to handle missing values, such as imputation or removal.
-
-**3.2 Clean and preprocess text data:**   CONSIDER WHAT WE ACTUALLY WANT TO REMOVE (CONSIDER HOW SEMANTICS AND WORDING CAN CHANGE MODEL OUTPUT)
-- Perform text cleaning techniques such as removing special characters, punctuation, and stopwords.
-- Convert text to lowercase and handle any inconsistencies.
-- Apply tokenization, stemming, or lemmatization to standardize the text data.
-- Remove any irrelevant or noisy text elements.
-
-**3.3 Handle outliers or anomalies:**
+## Step 3: Data Cleaning (EACH CONDUCT DATA CLEANING AS APPROPIATE)
+**3.1 Clean and preprocess text data:**   
+- Perform text cleaning:
+    - 3.1.1 lowercase and remove special characters/punctuation
+    - 3.1.2 remove stopwords
+    - 3.1.3 apply tokenization
+    - 3.1.4 apply stemming or lemmatization
+**3.2 Handle outliers or anomalies:**
 - Identify outliers or anomalies in numerical variables such as views or dates.
-- Decide on an appropriate approach to handle outliers, such as removing them or applying statistical transformations.
-
-**3.4 Remove duplicate records:**
+- Decide on an appropriate approach to handle outliers, such as removing them or applying statistical transformations (consider scaling views and like counts - to account for newer posts).
+**3.3 Remove duplicate records:**
 - Identify and remove any duplicate rows in the dataset.
 
 ## Step 4: Model Building and Recommendation
-
 **4.1 Perform feature engineering:**
-- Identify relevant features from the TED Talks dataset that could contribute to movie recommendation, such as topics, titles, or authors.
+- Identify relevant features from the TED Talks dataset that could contribute to movie recommendation, such as topics, titles, or authors (notate on workbook).
 - Extract additional features or create embeddings to capture semantic meaning for better recommendation performance.
-- Utilize transformer models like BERT, DialoGPT, GPT, or T5 to process the text data (transcripts, titles) and generate contextualized embeddings.
+- Utilize transformer models like BERT, DialoGPT (not great for recomender, but good for chatbot), GPT, or T5 to process the text data (transcripts, titles) and generate contextualized embeddings.
+    - BERT - Patrick
+    - GPT - Brittany
+    - T5 - Uche
 - Fine-tune the transformer models on the TED Talks dataset to capture specific patterns and relationships.
 - Explore different approaches, such as masked language modeling or next sentence prediction, depending on the transformer model used.
 
-## Step 4.2: Generate movie recommendations
+## Step 4.2: Generate movie recommendations 
 
 4.2.1 Perform feature extraction:
 - Utilize the trained transformer models (e.g., BERT, DialoGPT, GPT, T5) to generate embeddings or representations for the TED Talks and movies.
 - Extract relevant features from the TED Talks dataset, such as topics, titles, authors, or generated embeddings from the transformer models.
-
-4.2.2 Cluster TED Talks and movies:
-- Apply clustering algorithms, such as K-means, DBSCAN, or hierarchical clustering, on the extracted features or embeddings.
+4.2.2 Cluster TED Talks and movies: (test all three clustering methods)
+- Apply clustering algorithms, K-means, DBSCAN or hierarchical clustering, on the extracted features or embeddings.
 - Group similar TED Talks and movies into clusters based on their feature similarities or embeddings.
-
 4.2.3 Generate movie recommendations within clusters:
 - For a given TED Talk or user preference, identify the cluster to which it belongs.
 - Within the cluster, compute similarity scores or distances between TED Talks and movies based on their features or embeddings.
 - Utilize recommendation algorithms, such as K-nearest neighbors (KNN), to select the top-k most similar movies to the TED Talk or user preference.
-
 **4.3 Evaluate and refine the recommendations:**
 - Evaluate the generated movie recommendations within each cluster using appropriate metrics, such as precision, recall, or NDCG (Normalized Discounted Cumulative Gain).
 - Collect user feedback and ratings to further refine and personalize the movie recommendations.
 - Fine-tune the recommendation algorithm based on user feedback and iterate on the feature engineering and clustering processes to improve the recommendations.
+- Based on transformer model apply appropiate refining/grid search/parameter search
 
 ## Step 5: Data Validation
 
 **5.1 Validate the processed data format:**
 - Ensure that the TED Talks dataset, after data cleaning and feature engineering, is properly preprocessed and formatted for analysis.
 - Validate that numerical variables (views, dates) are in the appropriate format.
-
 **5.2 Check for inconsistencies or errors:**
 - Perform data quality checks to identify any inconsistencies or errors in the processed dataset. (i.e. coherence scores, similarity checks across semantic scores etc.)
 - Look for missing values, duplicate records, or outliers that may affect the recommendation or analysis.
 - Validate that the features, embeddings, and topic labels created in the feature engineering step are accurate and appropriate.
-
 **5.3 Rectify inconsistencies or errors:**
 - Address any identified inconsistencies or errors in the dataset.
 - Decide on an appropriate approach to handle missing values, duplicate records, or outliers.
 - Apply data cleaning techniques or imputation methods to rectify errors or inconsistencies.
 
+-----------------------------------------------------------------------------------------------------
 
 ## Chatbot Project Plan
 
 ### Step 1: Data Collection
 
-1. Collect conversational data that includes user queries, responses, and feedback related to movie recommendations.
-   - Techniques like web scraping or API integration can be used to gather relevant data.
+1. Collect conversational data that includes user queries, responses, and feedback related to tedtalk recommendations.
 
 ### Step 2: Data Preprocessing
 
