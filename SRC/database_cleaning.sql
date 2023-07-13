@@ -17,6 +17,6 @@
 -- GROUP BY author
 -- ORDER BY views DESC LIMIT 150
 
--- Delete from topics
+Delete from topics2
 
 
