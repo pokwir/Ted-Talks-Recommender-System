@@ -1,9 +1,9 @@
-# Ted-Talks-Recommender-System
+# Ted Talks Recommender and Chatbot Service
 This Repo contains my work on scraping ted-talks from Tedtalks.org and building a NLP recommender system. 
 
 This project was a collaboration between myself, Uche, and Brittany. — Will add full names and github links. 
 
-## Data acquzition 
+## Data Acquisition 
 The data was scraped from tedtalks.org using the BeautifulSoup library. The data was then cleaned and stored in a sql database. Features collected from the site are title, speaker, description, url, and topics and transcript for each talk. There are a total of 6000 talk events from XX authors across XX topics. 
 
 ## Exploratory Data Analysis
