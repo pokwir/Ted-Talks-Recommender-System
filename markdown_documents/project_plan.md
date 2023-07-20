@@ -7,6 +7,7 @@ Group Conditions
   - name the imported csv: tedtalk_data
   - for cleaning: tedtalk_lowercase, tedtalk_stopwords, tedtalk_tokenization, tedtalk_stemming, tedtalk_lemmatisation
   - for EDA: tedtalk_sentimentanalysis, tedtalk_topicanalysis, tedltalk_word_frequency, tedltalk_sentence_length, tedltalk_average_word_length
+  - for basic use df is tedtalks
 - Use nltk library for stopword corpus
 
 ### Step 1: Data Scraping
