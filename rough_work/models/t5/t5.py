@@ -49,6 +49,7 @@ def similarity_matrix(df, feature):
     # values = df['summary'].values # values will be the sentence summaries
     values = df.feature.values
     # make a df with rows and column names from summary columns
+    import pandas as pd
     df_summary = pd.DataFrame(index=values, columns=values)
 
     # loop through rows & columns to do similarity (row,col)
