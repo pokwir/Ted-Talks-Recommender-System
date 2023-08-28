@@ -1,3 +1,4 @@
 rough_work/eda/ted_talk_fulldata_v2.csv filter=lfs diff=lfs merge=lfs -text
 Data_output/ted_talk_summary_t5_v2.csv filter=lfs diff=lfs merge=lfs -text
 rough_work/models/t5/datasets/ filter=lfs diff=lfs merge=lfs -text
+rough_work/models/t5/datasets/t5_embedded_dataset filter=lfs diff=lfs merge=lfs -text
