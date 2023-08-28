@@ -1,3 +1,5 @@
 ../../../.DS_Store
 .ipynb_checkpoints/
 rough_work/models/t5/datasets/
+*/.DS_Store
+rough_work/models/t5/datasets__/
