@@ -35,16 +35,22 @@ except:
     # install faiss for CPU
     install ('faiss-cpu')
     # get source file
-    subprocess.run([sys.executable, '-m', 'subprocess'] + ['unzip', 'datasets.zip', '-n'])
+    subprocess.run([sys.executable, '-m', 'subprocess'] + ['unzip', 'datasets.zip', '-n'])   
     SOURCE_DIR = "./Datasets/"
 
 
 import faiss
 # load the t5_dataset_with_sentence_embeddings   
-t5_dataset = load_from_disk(SOURCE_DIR+'t5_embedded_dataset')
-t5_dataset.add_faiss_index(column="embeddings")
-# create Pandas dataframe
-df = pd.DataFrame(t5_dataset[:])
+try:
+    t5_dataset = load_from_disk(SOURCE_DIR+'t5_embedded_dataset')
+    t5_dataset.add_faiss_index(column="embeddings")
+    # create Pandas dataframe
+    df = pd.DataFrame(t5_dataset[:])
+except Exception as e:
+    print(f"An error has occurred: {e}")
+    print("Contact repo contributors for access to datasets.zip")
+    sys.exit(1)
+
 
 
 # import the t5-base model and tokenizer
@@ -173,9 +179,7 @@ def get_recommendations(topic = None, query=None, num=3):
         print(f'TRANSCRIPT: {" ".join(row.transcript.split(" ")[:20])}')
         print("============")
         print("")
-        
-        
-        
+       
         
 def main():
     if args.topic or args.query:
