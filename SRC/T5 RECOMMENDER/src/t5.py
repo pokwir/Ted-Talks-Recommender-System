@@ -6,9 +6,9 @@ parser.add_argument("--num", type=int, default=3, help="Number of recommendation
 args = parser.parse_args()
   
 import os   
-
 import subprocess
 import sys
+import zipfile
 
 def install(package):
     subprocess.call([sys.executable, '-m', 'pip', 'install', '-q', package])
@@ -35,7 +35,8 @@ except:
     # install faiss for CPU
     install ('faiss-cpu')
     # get source file
-    subprocess.run([sys.executable, '-m', 'subprocess'] + ['unzip', 'datasets.zip', '-n'])   
+    with zipfile.ZipFile('datasets.zip', 'r') as z:
+        z.extractall()  
     SOURCE_DIR = "./Datasets/"
 
 
