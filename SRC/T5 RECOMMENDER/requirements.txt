@@ -1,0 +1,11 @@
+torch
+datasets
+transformers
+sentence_transformers
+faiss-cpu
+pandas
+numpy
+os
+sys
+subprocess
+argparse
