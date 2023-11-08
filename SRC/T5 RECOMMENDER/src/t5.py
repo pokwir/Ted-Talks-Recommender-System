@@ -178,7 +178,6 @@ def get_recommendations(topic = None, query=None, num=3):
         
         
 def main():
-    # Your code to call get_recommendations or other functions based on CLI arguments
     if args.topic or args.query:
         get_recommendations(topic=args.topic, query=args.query, num=args.num)
     else:
