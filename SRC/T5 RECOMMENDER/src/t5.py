@@ -7,31 +7,39 @@ args = parser.parse_args()
   
 import os   
 
+import subprocess
+import sys
+
+def install(package):
+    subprocess.call([sys.executable, '-m', 'pip', 'install', '-q', package])
+
+for package in ['datasets', 'transformers', 'sentence_transformers', 'faiss-cpu']:
+    install (package)
+    os.system('clear')    
+    
 import pandas as pd
 import numpy as np
 from datasets import load_from_disk
 import faiss
-
-import subprocess
-import sys
-
-def install(name):
-    subprocess.call([sys.executable, '-m', 'pip', 'install', '-q', name])
-
-for package in ['datasets', 'transformers', 'sentence_transformers', 'faiss-cpu']:
-    install (package)
-    os.system('clear')
-    
-    
-    
+import torch
     
 try:
     from google.colab import drive
+    drive.mount('/content/drive')
+    # install faiss for GPU
     install ('faiss-gpu')
+    # get source file
     SOURCE_DIR = "/content/drive/MyDrive/MLOPs_Projects/TED_Project/Data_output/T5/"
 except:
+    print("Not in Colab environment. Some of the functionality may not work.")
+    # install faiss for CPU
     install ('faiss-cpu')
+    # get source file
+    subprocess.run([sys.executable, '-m', 'subprocess'] + ['unzip', 'datasets.zip', '-n'])
     SOURCE_DIR = "./Datasets/"
+
+
+import faiss
 # load the t5_dataset_with_sentence_embeddings   
 t5_dataset = load_from_disk(SOURCE_DIR+'t5_embedded_dataset')
 t5_dataset.add_faiss_index(column="embeddings")
@@ -48,7 +56,7 @@ model = AutoModel.from_pretrained(model_ckpt)
 # word_embedding_model = models.Transformer(model_ckpt)
 # model = SentenceTransformer(modules=[word_embedding_model])
 
-import torch
+
 # set device diagnostics
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 model.to(device)
@@ -105,8 +113,7 @@ def get_embeddings_with_topic(topic):
 
 
 def get_recommendations(topic = None, query=None, num=3):
-    clear_output(wait=True)
-    display(HTML('<script>Jupyter.notebook.clear_all_output()</script>'))
+
     os.system('clear')
     if num > 10:
         return ("Can only return top 10 or fewer recommendations for now.")
