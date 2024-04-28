@@ -113,16 +113,17 @@ def get_embeddings_with_topic(topic):
 
 
 def get_recommendations(topic = None, query=None, num=3):
-
-    os.system('clear')
-    if num > 10:
-        return ("Can only return top 10 or fewer recommendations for now.")
     """
     input: a query asking for a topic recommendation
     OR
     input: one of the recommender topics
     output: a list of the top 3 most relevant topics
     """
+
+    os.system('clear')
+    if num > 10:
+        raise Exception ("Can only return top 10 or fewer recommendations for now.")
+
     query_embedding = None
     if topic:
         # call a function to get the embeddings
@@ -144,10 +145,7 @@ def get_recommendations(topic = None, query=None, num=3):
         scores, samples = t5_dataset.get_nearest_examples(
                 'embeddings',
                 query_embedding,
-                k=10)
-                
-                
-                
+                k=10)           
 
     # use get_nearest_example to get similar embeddings
     scores, samples = t5_dataset.get_nearest_examples(
@@ -187,10 +185,11 @@ def main():
     
     if args.topic or args.query:
         results_df = get_recommendations(topic=args.topic, query=args.query, num=args.num)
-            # print results
+        
+        # print results
         print("\n\nRecommendations based on",
-              f"the query '{query}'\n" if args.query else f"the topic: '{topic}'\n"
-              )
+                  f"the query '{args.query}'\n" if args.query else f"the topic: '{args.topic}'\n"
+                  )
         for _, row in results_df.iterrows():
             print(f"TITLE: {row.title}")
             print(f"AUTHOR: {row.author}")
@@ -206,4 +205,7 @@ def main():
         print("You must provide either a --topic or a --query to get recommendations.")
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        print(e)
