@@ -1,10 +1,3 @@
-import argparse
-parser = argparse.ArgumentParser(description="T5-based Recommender")
-parser.add_argument("--topic", help="Topic for recommendations")
-parser.add_argument("--query", help="Query for recommendations")
-parser.add_argument("--num", type=int, default=3, help="Number of recommendations to show")
-args = parser.parse_args()
-  
 import os   
 import subprocess
 import sys
@@ -166,25 +159,49 @@ def get_recommendations(topic = None, query=None, num=3):
     samples_df = pd.DataFrame.from_dict(samples)
     samples_df['scores'] = scores
     samples_df = samples_df.sort_values('scores', ascending=False)[:num]
+    
+    return samples_df
 
-    # print results
-    print("\n\nRecommendations based on",
-          f"the query '{query}'\n" if query else f"the topic: '{topic}'\n"
-          )
-    for _, row in samples_df.iterrows():
-        print(f"TITLE: {row.title}")
-        print(f"AUTHOR: {row.author}")
-        print(f"SCORE: {row.scores}")
-        print(f"DESCRIPTION: {row.description}")
-        print(f"TAGS: {row.tags}")
-        print(f'TRANSCRIPT: {" ".join(row.transcript.split(" ")[:20])}')
-        print("============")
-        print("")
+#     # print results
+#     print("\n\nRecommendations based on",
+#           f"the query '{query}'\n" if query else f"the topic: '{topic}'\n"
+#           )
+#     for _, row in samples_df.iterrows():
+#         print(f"TITLE: {row.title}")
+#         print(f"AUTHOR: {row.author}")
+#         print(f"SCORE: {row.scores}")
+#         print(f"DESCRIPTION: {row.description}")
+#         print(f"TAGS: {row.tags}")
+#         print(f'TRANSCRIPT: {" ".join(row.transcript.split(" ")[:20])}')
+#         print("============")
+#         print("")
        
         
-def main():
+def main(): 
+    import argparse
+    parser = argparse.ArgumentParser(description="T5-based Recommender")
+    parser.add_argument("--topic", help="Topic for recommendations")
+    parser.add_argument("--query", help="Query for recommendations")
+    parser.add_argument("--num", type=int, default=3, help="Number of recommendations to show")
+    args = parser.parse_args()
+    
     if args.topic or args.query:
-        get_recommendations(topic=args.topic, query=args.query, num=args.num)
+        results_df = get_recommendations(topic=args.topic, query=args.query, num=args.num)
+            # print results
+        print("\n\nRecommendations based on",
+              f"the query '{query}'\n" if args.query else f"the topic: '{topic}'\n"
+              )
+        for _, row in results_df.iterrows():
+            print(f"TITLE: {row.title}")
+            print(f"AUTHOR: {row.author}")
+            print(f"SCORE: {row.scores}")
+            print(f"DESCRIPTION: {row.description}")
+            print(f"TAGS: {row.tags}")
+            print(f'TRANSCRIPT: {" ".join(row.transcript.split(" ")[:20])}')
+            print("============")
+            print("")
+     
+        
     else:
         print("You must provide either a --topic or a --query to get recommendations.")
 
